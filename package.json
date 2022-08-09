@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "npm run start-local",
-    "start-local": "npm install && cross-env NODE_ENV=local nodemon ./app.js",
-    "start-development": "npm install && cross-env NODE_ENV=development nodemon ./app.js",
-    "start-production": "cross-env NODE_ENV=production node app.js"
+    "start-local": "npm install && cross-env NODE_ENV=local nodemon ./bin/www ./app.js",
+    "start-development": "npm install && cross-env NODE_ENV=development nodemon ./bin/www ./app.js",
+    "start-production": "cross-env NODE_ENV=production node ./bin/www app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
