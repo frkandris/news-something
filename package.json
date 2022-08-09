@@ -3,15 +3,22 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "npm run start-local",
+    "start-local": "npm install && cross-env NODE_ENV=local nodemon ./app.js",
+    "start-development": "npm install && cross-env NODE_ENV=development nodemon ./app.js",
+    "start-production": "cross-env NODE_ENV=production node app.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
+    "cross-env": "^7.0.3",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "hbs": "^4.2.0",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "rss-parser": "^3.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }

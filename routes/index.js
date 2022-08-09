@@ -7,10 +7,10 @@ let parser = new Parser();
 (async () => {
 
   let feed = await parser.parseURL('https://www.origo.hu/contentpartner/rss/origoall/origo.xml');
-  console.log(feed);
+  console.log(feed.title);
 
   feed.items.forEach(item => {
-    // console.log(item)
+    console.log(item.title)
   });
 
 })();
