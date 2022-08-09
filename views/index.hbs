@@ -1,6 +1,6 @@
 <h1>{{title}}</h1>
 <ul>
 {{#each items}}
-    <li>{{this.title}}</li>
+    <li><a href="{{this.link}}">{{this.title}}</a> ({{this.categories}})</li>
 {{/each}}
 </ul>
