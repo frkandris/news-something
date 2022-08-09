@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
     console.log(feed.title);
   
     feed.items.forEach(item => {
-      console.log(item.title)
+      console.log(item)
     });
 
     res.render('index', { title: feed.title, items: feed.items });
