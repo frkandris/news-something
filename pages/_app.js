@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Pet Care App</title>
+        <title>News something</title>
       </Head>
 
       <div className="top-bar">
