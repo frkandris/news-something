@@ -9,4 +9,4 @@ jobs:
       - name: Call our API route
         run: |
           curl --request GET \
-          --url 'https://https://news-something.vercel.app/api/feed/read'
+          --url 'https://news-something.vercel.app/api/feed/read'
