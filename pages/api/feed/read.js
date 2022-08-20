@@ -12,22 +12,16 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        // create an array named feedList to store list of rss feeds
         let feedList = [
           'https://www.origo.hu/contentpartner/rss/origoall/origo.xml',
           'https://telex.hu/rss/feed.rss'
         ];
-
-        // cycle through the feedList array and parse each feed
         for (let i = 0; i < feedList.length; i++) {
           let feed = await parser.parseURL(feedList[i]);
-
-          // an async function that inserts the feed items into database
           const insertFeedItems = async () => {
-
             for (let i = 0; i < feed.items.length; i++) {
               const item = feed.items[i];
-              console.log(item.title, feed.title);
+              // console.log(item.title, feed.title);
               const feedItemExists = await FeedItem.findOne({ guid: item.guid });
               if (!feedItemExists) {
                 const feedItem = await FeedItem.create({
