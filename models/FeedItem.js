@@ -26,6 +26,9 @@ const FeedItemSchema = new mongoose.Schema({
   isoDate: {
     type: String,
   },
+  feedTitle: {
+    type: String,
+  },
 })
 
 export default mongoose.models.FeedItem || mongoose.model('FeedItem', FeedItemSchema)
