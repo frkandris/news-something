@@ -12,35 +12,41 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const feed = await parser.parseURL('https://www.origo.hu/contentpartner/rss/origoall/origo.xml');
+        // create an array named feedList to store list of rss feeds
+        let feedList = [
+          'https://www.origo.hu/contentpartner/rss/origoall/origo.xml',
+          'https://telex.hu/rss/feed.rss'
+        ];
 
-        // an async function that inserts the feed items into database
-        const insertFeedItems = async () => {
+        // cycle through the feedList array and parse each feed
+        for (let i = 0; i < feedList.length; i++) {
+          let feed = await parser.parseURL(feedList[i]);
 
-          for (let i = 0; i < feed.items.length; i++) {
-            const item = feed.items[i];
+          // an async function that inserts the feed items into database
+          const insertFeedItems = async () => {
 
-            // check if the feed item already exists in the database
-            const feedItemExists = await FeedItem.findOne({ guid: item.guid });
-            if (feedItemExists) {
-              return;
+            for (let i = 0; i < feed.items.length; i++) {
+              const item = feed.items[i];
+              console.log(item.title, feed.title);
+              const feedItemExists = await FeedItem.findOne({ guid: item.guid });
+              if (!feedItemExists) {
+                const feedItem = await FeedItem.create({
+                  title: item.title,
+                  link: item.link,
+                  pubDate: item.pubDate,
+                  content: item.content,
+                  contentSnippet: item.contentSnippet,
+                  guid: item.guid,
+                  categories: item.categories,
+                  isoDate: item.isoDate,
+                  feedTitle: feed.title,
+                })
+              }
             }
-            // if the feed item does not exist, insert it into the database
-            const feedItem = await FeedItem.create({
-              title: feed.items[0].title,
-              link: feed.items[0].link,
-              pubDate: feed.items[0].pubDate,
-              content: feed.items[0].content,
-              contentSnippet: feed.items[0].contentSnippet,
-              guid: feed.items[0].guid,
-              categories: feed.items[0].categories,
-              isoDate: feed.items[0].isoDate,
-            })
           }
+          await insertFeedItems();
         }
-        await insertFeedItems();
-
-        res.status(200).json({ success: true, data: feed })
+        res.status(200).json({ success: true })
       } catch (error) {
         res.status(400).json({ success: false })
       }
