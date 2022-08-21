@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { BiCommentDetail } from 'react-icons/bi';
 import dbConnect from '../../../lib/dbConnect'
 import Feed from '../../../models/Feed'
 import FeedItem from '../../../models/FeedItem'
@@ -20,13 +21,18 @@ const FeedPage = ({ feedData, feedItemList }) => {
                                         {moment(item.pubDate).format('HH:mm')}
                                     </td>
                                     <td>
-                                        <Link href={item.link}>{item.title}</Link><br />
+                                        <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link><br />
                                         {item.content}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    <div className="text-end">
+                        <Link href="/">
+                            <a>Vissza a főoldalra</a>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
