@@ -5,7 +5,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>News something</title>
+        <title>Friss hírek | friss-hirek.com</title>
       </Head>
 
       <div className="grid wrapper">
