@@ -5,6 +5,12 @@ import Feed from '../models/Feed'
 let moment = require('moment')
 let Parser = require('rss-parser');
 let parser = new Parser();
+const pino = require('pino')
+const logger = pino({
+  transport: {
+    target: 'pino-pretty'
+  },
+})
 
 const Index = ({ feedList, feedItemListArray }) => (
   <div>
