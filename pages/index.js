@@ -3,12 +3,6 @@ import dbConnect from '../lib/dbConnect'
 import FeedItem from '../models/FeedItem'
 import Feed from '../models/Feed'
 let moment = require('moment')
-const pino = require('pino')
-const logger = pino({
-  transport: {
-    target: 'pino-pretty'
-  },
-})
 
 const Index = ({ feedList, feedItemListArray }) => (
   <div>
