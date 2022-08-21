@@ -7,11 +7,11 @@ let parser = new Parser();
 export default async function handler(req, res) {
   const { method } = req
 
-  await dbConnect()
 
   switch (method) {
     case 'GET':
       try {
+        await dbConnect()
         let feedList = [
           'https://www.origo.hu/contentpartner/rss/origoall/origo.xml',
           'https://telex.hu/rss/feed.rss'
