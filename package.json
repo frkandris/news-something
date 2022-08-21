@@ -4,13 +4,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "bootstrap": "^5.2.0",
     "moment": "^2.29.4",
     "mongoose": "^6.0.11",
     "next": "^12.2.5",
+    "next-sitemap": "^3.1.21",
     "pino": "^8.4.2",
     "pino-pretty": "^9.0.1",
     "react": "^17.0.2",
