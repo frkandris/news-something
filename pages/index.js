@@ -4,21 +4,47 @@ import FeedItem from '../models/FeedItem'
 import Feed from '../models/Feed'
 let moment = require('moment')
 
-const Index = ({ feedList, feedItemListArray }) => (
-  <div>
-    {feedItemListArray.map((feed, index) => (
-      <div key={index}>
-        <h3><Link href={feedList[index]._id}>{feedList[index].displayTitle}</Link></h3>
-        <ul>
-          {feed.map((item, index) => (
-            <li key={index}>
-              ({moment(item.pubDate).format('HH:mm')}) <Link href={item.link}>{item.title}</Link>
-            </li>
-          ))}
-        </ul>
+const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
+  <>
+    <div className="container">
+      <div className="row align-items-start m-2">
+        <div className="col border p-3 m-2 bg-light rounded">
+          <h5>Friss hírek</h5>
+          <table>
+            {freshFeedItemList.map((item, index) => (
+              <tr key={index}>
+                <td className="px-1">
+                  {moment(item.pubDate).format('HH:mm')}
+                </td>
+                <td>
+                  <Link href={item.link}>{item.title}</Link> ({item.displayTitle})
+                </td>
+              </tr>
+            ))}
+          </table>
+        </div>
       </div>
-    ))}
-  </div>
+      <div className="row align-items-start m-2">
+        {feedItemListArray.map((feed, index) => (
+          <div className="col border p-3 m-2 bg-light rounded" key={index}>
+            <h5>{feedList[index].displayTitle}</h5>
+            <ul className="list-unstyled">
+              {feed.map((item, index) => (
+                <li key={index}>
+                  <Link href={item.link}>{item.title}</Link>
+                </li>
+              ))}
+            </ul>
+            <div className="text-end">
+              <Link href={`/source/${feedList[index]._id}`}>
+                <a>További {feedList[index].displayTitle} hírek</a>
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </>
 )
 
 export async function getServerSideProps() {
@@ -32,6 +58,15 @@ export async function getServerSideProps() {
     return feedList
   })
 
+  // get 10 latest feed items
+  result = await FeedItem.find({}).sort({ pubDate: -1 }).limit(12)
+  const freshFeedItemList = result.map((doc) => {
+    const freshFeedItemList = doc.toObject()
+    freshFeedItemList._id = freshFeedItemList._id.toString()
+    return freshFeedItemList
+  })
+
+  // get the feed items for each feed separately
   let feedItemListArray = [];
   for (let i = 0; i < feedList.length; i++) {
     const result = await FeedItem.find({ feedTitle: feedList[i].title }).sort({ pubDate: -1 }).limit(10);
@@ -42,7 +77,16 @@ export async function getServerSideProps() {
     })
     feedItemListArray.push(feedItemList)
   }
-  return { props: { feedList: feedList, feedItemListArray: feedItemListArray } }
+
+  for (let i = 0; i < freshFeedItemList.length; i++) {
+    for (let k = 0; k < feedList.length; k++) {
+      if (freshFeedItemList[i].feedTitle === feedList[k].title) {
+        freshFeedItemList[i].displayTitle = feedList[k].displayTitle;
+      }
+    }
+  }
+
+  return { props: { freshFeedItemList: freshFeedItemList, feedList: feedList, feedItemListArray: feedItemListArray } }
 }
 
 export default Index
