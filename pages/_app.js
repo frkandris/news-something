@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.css'
 import '../css/style.css'
 import Head from 'next/head'
 
