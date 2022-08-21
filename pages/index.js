@@ -1,16 +1,16 @@
 import Link from 'next/link'
 import dbConnect from '../lib/dbConnect'
 import FeedItem from '../models/FeedItem'
+import Feed from '../models/Feed'
 let moment = require('moment')
 let Parser = require('rss-parser');
 let parser = new Parser();
 
-const Index = ({ feedArray }) => (
-
+const Index = ({ feedList, feedItemListArray }) => (
   <div>
-    {feedArray.map((feed, index) => (
+    {feedItemListArray.map((feed, index) => (
       <div key={index}>
-        <h3>{feed[0].feedTitle}</h3>
+        <h3>{feedList[index].displayTitle}</h3>
         <ul>
           {feed.map((item, index) => (
             <li key={index}>
@@ -27,23 +27,24 @@ export async function getServerSideProps() {
 
   await dbConnect()
 
-  let feedList = [
-    'ORIGO',
-    'Telex RSS: '
-  ];
+  let result = await Feed.find({})
+  const feedList = result.map((doc) => {
+    const feedList = doc.toObject()
+    feedList._id = feedList._id.toString()
+    return feedList
+  })
 
-  let feedArray = [];
+  let feedItemListArray = [];
   for (let i = 0; i < feedList.length; i++) {
-    // find the last 10 feed items for each feed
-    const result = await FeedItem.find({ feedTitle: feedList[i] }).sort({ pubDate: -1 }).limit(10);
-    const feed = result.map((doc) => {
-      const feed = doc.toObject()
-      feed._id = feed._id.toString()
-      return feed
+    const result = await FeedItem.find({ feedTitle: feedList[i].title }).sort({ pubDate: -1 }).limit(10);
+    const feedItemList = result.map((doc) => {
+      const feedItemList = doc.toObject()
+      feedItemList._id = feedItemList._id.toString()
+      return feedItemList
     })
-    feedArray.push(feed)
+    feedItemListArray.push(feedItemList)
   }
-  return { props: { feedArray: feedArray } }
+  return { props: { feedList: feedList, feedItemListArray: feedItemListArray } }
 }
 
 export default Index
