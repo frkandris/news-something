@@ -1,8 +1,11 @@
 import Link from 'next/link'
+import { BiCommentDetail } from 'react-icons/bi';
 import dbConnect from '../lib/dbConnect'
 import FeedItem from '../models/FeedItem'
 import Feed from '../models/Feed'
 let moment = require('moment')
+
+
 
 const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
   <>
@@ -17,7 +20,7 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
                   {moment(item.pubDate).format('HH:mm')}
                 </td>
                 <td>
-                  <Link href={item.link}>{item.title}</Link> ({item.displayTitle})
+                  <Link href={item.link}>{item.title}</Link> ({item.displayTitle}) <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link>
                 </td>
               </tr>
             ))}
@@ -31,7 +34,7 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
             <ul className="list-unstyled">
               {feed.map((item, index) => (
                 <li key={index}>
-                  <Link href={item.link}>{item.title}</Link>
+                  <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link>
                 </li>
               ))}
             </ul>
