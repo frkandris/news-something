@@ -1,10 +1,9 @@
 // pages/server-sitemap-index.xml/index.tsx
 import { getServerSideSitemapIndex } from 'next-sitemap'
-import { GetServerSideProps } from 'next'
 import dbConnect from '../../lib/dbConnect'
 import FeedItem from '../../models/FeedItem'
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps = async (ctx) => {
     await dbConnect()
 
     const feedIds = await FeedItem.find({}).select('_id')
