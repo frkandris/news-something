@@ -14,7 +14,7 @@ const Index = ({ feedList, feedItemListArray }) => (
   <div>
     {feedItemListArray.map((feed, index) => (
       <div key={index}>
-        <h3>{feedList[index].displayTitle}</h3>
+        <h3><Link href={feedList[index]._id}>{feedList[index].displayTitle}</Link></h3>
         <ul>
           {feed.map((item, index) => (
             <li key={index}>
