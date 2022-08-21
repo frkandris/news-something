@@ -3,8 +3,6 @@ import dbConnect from '../lib/dbConnect'
 import FeedItem from '../models/FeedItem'
 import Feed from '../models/Feed'
 let moment = require('moment')
-let Parser = require('rss-parser');
-let parser = new Parser();
 const pino = require('pino')
 const logger = pino({
   transport: {
