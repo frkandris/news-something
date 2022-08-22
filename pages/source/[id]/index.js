@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { BiCommentDetail } from 'react-icons/bi';
 import dbConnect from '../../../lib/dbConnect'
 import Feed from '../../../models/Feed'
 import FeedItem from '../../../models/FeedItem'
-import Link from 'next/link'
 let moment = require('moment')
 
 const FeedPage = ({ feedData, feedItemList }) => {
