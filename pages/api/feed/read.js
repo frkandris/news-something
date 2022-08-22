@@ -23,7 +23,7 @@ export default async function handler(req, res) {
             for (let i = 0; i < feed.items.length; i++) {
               const item = feed.items[i];
               // console.log(item.title, feed.title);
-              const feedItemExists = await FeedItem.findOne({ guid: item.guid });
+              const feedItemExists = await FeedItem.findOne({ link: item.link });
               if (!feedItemExists) {
                 const feedItem = await FeedItem.create({
                   title: item.title,
