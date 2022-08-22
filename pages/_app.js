@@ -1,9 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import '../css/style.css'
+import { useEffect } from 'react';
+import TagManager from 'react-gtm-module';
 import Head from 'next/head'
 import Link from 'next/link'
 
 function MyApp({ Component, pageProps }) {
+  useEffect(() => {
+    TagManager.initialize({ gtmId: 'GTM-WCCSKJS' });
+  }, []);
   return (
     <>
       <Head>
