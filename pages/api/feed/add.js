@@ -15,12 +15,13 @@ export default async function handler(req, res) {
                     'https://www.origo.hu/contentpartner/rss/origoall/origo.xml',
                     'https://telex.hu/rss/feed.rss',
                     'https://444.hu/feed',
-                    'https://index.hu/24ora/rss/'
+                    'https://index.hu/24ora/rss/',
+                    'https://liner.hu/feed/'
                 ];
                 for (let i = 0; i < feedList.length; i++) {
                     let item = await parser.parseURL(feedList[i]);
                     const insertFeed = async () => {
-                        const feedExists = await Feed.findOne({ feedUrl: item.feedUrl });
+                        const feedExists = await Feed.findOne({ title: item.title });
                         if (!feedExists) {
                             const result = await Feed.create({
                                 feedUrl: item.feedUrl,
