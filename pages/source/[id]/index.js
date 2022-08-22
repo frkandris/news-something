@@ -45,7 +45,7 @@ export async function getServerSideProps({ params }) {
     const feedData = await Feed.findById(params.id).lean()
     feedData._id = feedData._id.toString()
 
-    const result = await FeedItem.find({ feedTitle: feedData.title }).sort({ pubDate: -1 });
+    const result = await FeedItem.find({ feedTitle: feedData.title }).sort({ isoDate: -1 });
     const feedItemList = result.map((doc) => {
         const feedItemList = doc.toObject()
         feedItemList._id = feedItemList._id.toString()

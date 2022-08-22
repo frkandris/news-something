@@ -60,7 +60,7 @@ export async function getServerSideProps() {
   })
 
   // get 10 latest feed items
-  result = await FeedItem.find({}).sort({ pubDate: -1 }).limit(12)
+  result = await FeedItem.find({}).sort({ isoDate: -1 }).limit(12)
   const freshFeedItemList = result.map((doc) => {
     const freshFeedItemList = doc.toObject()
     freshFeedItemList._id = freshFeedItemList._id.toString()
@@ -70,7 +70,7 @@ export async function getServerSideProps() {
   // get the feed items for each feed separately
   let feedItemListArray = [];
   for (let i = 0; i < feedList.length; i++) {
-    const result = await FeedItem.find({ feedTitle: feedList[i].title }).sort({ pubDate: -1 }).limit(10);
+    const result = await FeedItem.find({ feedTitle: feedList[i].title }).sort({ isoDate: -1 }).limit(10);
     const feedItemList = result.map((doc) => {
       const feedItemList = doc.toObject()
       feedItemList._id = feedItemList._id.toString()
