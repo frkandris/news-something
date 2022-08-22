@@ -14,7 +14,7 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
           <table>
             {freshFeedItemList.map((item, index) => (
               <tr key={index}>
-                <td className="px-1 align-text-top">
+                <td className="px-1 align-text-top font-monospace small">
                   {moment(item.pubDate).format('HH:mm')}
                 </td>
                 <td className="align-text-top">
