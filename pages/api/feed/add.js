@@ -13,7 +13,8 @@ export default async function handler(req, res) {
                 await dbConnect()
                 let feedList = [
                     'https://www.origo.hu/contentpartner/rss/origoall/origo.xml',
-                    'https://telex.hu/rss/feed.rss'
+                    'https://telex.hu/rss/feed.rss',
+                    'https://444.hu/feed'
                 ];
                 for (let i = 0; i < feedList.length; i++) {
                     let item = await parser.parseURL(feedList[i]);
