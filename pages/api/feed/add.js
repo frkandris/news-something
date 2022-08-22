@@ -14,7 +14,8 @@ export default async function handler(req, res) {
                 let feedList = [
                     'https://www.origo.hu/contentpartner/rss/origoall/origo.xml',
                     'https://telex.hu/rss/feed.rss',
-                    'https://444.hu/feed'
+                    'https://444.hu/feed',
+                    'https://index.hu/24ora/rss/'
                 ];
                 for (let i = 0; i < feedList.length; i++) {
                     let item = await parser.parseURL(feedList[i]);
