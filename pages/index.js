@@ -5,8 +5,6 @@ import FeedItem from '../models/FeedItem'
 import Feed from '../models/Feed'
 let moment = require('moment')
 
-
-
 const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
   <>
     <div className="container">
