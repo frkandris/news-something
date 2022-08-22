@@ -19,7 +19,7 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
                 <td className="px-1 align-text-top">
                   {moment(item.pubDate).format('HH:mm')}
                 </td>
-                <td>
+                <td className="align-text-top">
                   <Link href={item.link}>{item.title}</Link> ({item.displayTitle}) <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link>
                 </td>
               </tr>

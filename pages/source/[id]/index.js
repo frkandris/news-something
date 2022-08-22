@@ -20,7 +20,7 @@ const FeedPage = ({ feedData, feedItemList }) => {
                                     <td className="px-1 align-text-top">
                                         {moment(item.pubDate).format('HH:mm')}
                                     </td>
-                                    <td>
+                                    <td className="align-text-top">
                                         <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link><br />
                                         {item.content}
                                     </td>
