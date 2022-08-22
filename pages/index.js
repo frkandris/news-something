@@ -8,8 +8,8 @@ let moment = require('moment')
 const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
   <>
     <div className="container">
-      <div className="row align-items-start m-2">
-        <div className="col border p-3 m-2 bg-light rounded">
+      <div className="d-flex align-content-around flex-wrap">
+        <div className="border p-3 mb-3 bg-light rounded w-100">
           <h5>Friss hírek</h5>
           <table>
             {freshFeedItemList.map((item, index) => (
@@ -25,9 +25,9 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
           </table>
         </div>
       </div>
-      <div className="row align-items-start m-2">
+      <div className="d-flex align-content-around flex-wrap">
         {feedItemListArray.map((feed, index) => (
-          <div className="col border p-3 m-2 bg-light rounded" key={index}>
+          <div className="border p-3 bg-light rounded w-25" key={index}>
             <h5>{feedList[index].displayTitle}</h5>
             <ul className="list-unstyled">
               {feed.map((item, index) => (
