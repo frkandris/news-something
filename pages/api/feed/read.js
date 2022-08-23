@@ -1,6 +1,8 @@
 import dbConnect from '../../../lib/dbConnect'
 import FeedItem from '../../../models/FeedItem'
 import Feed from '../../../models/Feed'
+import moment from 'moment';
+const logger = require('pino')();
 
 let Parser = require('rss-parser');
 let parser = new Parser();
@@ -13,17 +15,18 @@ export default async function handler(req, res) {
       try {
         await dbConnect()
         let feedList = await Feed.find({});
-        let feedUrlArray = [];
         for (let i = 0; i < feedList.length; i++) {
-          feedUrlArray.push(feedList[i].feedUrl);
-        }
-        for (let i = 0; i < feedUrlArray.length; i++) {          
-          let feed = await parser.parseURL(feedUrlArray[i]);
+          let feed = await parser.parseURL(feedList[i].feedUrl);
           const insertFeedItems = async () => {
-            for (let i = 0; i < feed.items.length; i++) {
-              const item = feed.items[i];
+            for (let j = 0; j < feed.items.length; j++) {
+              const item = feed.items[j];
               const feedItemExists = await FeedItem.findOne({ link: item.link });
-              // console.log("%s - %s", feed.title, item.title);
+              logger.info(
+                {date: moment(item.pubDate).format('YYYY-MM-DD HH:mm'),
+                feedTitle: feedList[i].displayTitle,
+                title: item.title,
+                alreadyInDB: (feedItemExists !== null)
+              }); 
               if (!feedItemExists) {
                 const feedItem = await FeedItem.create({
                   title: item.title,
