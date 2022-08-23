@@ -64,6 +64,7 @@ export async function getServerSideProps() {
   const feedList = result.map((doc) => {
     const feedList = doc.toObject()
     feedList._id = feedList._id.toString()
+    feedList.lastUpdated = feedList.lastUpdated.toString()
     return feedList
   })
 
