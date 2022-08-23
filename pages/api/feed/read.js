@@ -40,7 +40,6 @@ export default async function handler(req, res) {
                     date: moment(item.pubDate).format('YYYY-MM-DD HH:mm'),
                     feedTitle: feedList[i].displayTitle,
                     title: item.title,
-                    alreadyInDB: (feedItemExists !== null)
                   });
               }
             }
