@@ -34,17 +34,17 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
               </div>
               <div className="card-body">
                 <table>
-                <tbody>
-                  {feed.map((item, index2) => (
-                    <tr key={index2}>
-                      <td className="px-1 align-text-top font-monospace small">
-                        {moment(item.pubDate).format('HH:mm')}
-                      </td>
-                      <td className="align-text-top">
-                        <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link>
-                      </td>
-                    </tr>
-                  ))}
+                  <tbody>
+                    {feed.map((item, index2) => (
+                      <tr key={index2}>
+                        <td className="px-1 align-text-top font-monospace small">
+                          {moment(item.pubDate).format('HH:mm')}
+                        </td>
+                        <td className="align-text-top">
+                          <a href={item.link}>{item.title}</a> <a href={`/article/${item._id}`}><BiCommentDetail /></a>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -83,6 +83,10 @@ export async function getServerSideProps() {
     const feedItemList = result.map((doc) => {
       const feedItemList = doc.toObject()
       feedItemList._id = feedItemList._id.toString()
+      if (!moment(feedItemList.pubDate, 'HH:mm').isValid()) {
+        feedItemList.pubDate = new Date()
+        feedItemList.pubDate = feedItemList.pubDate.toString()
+      }
       return feedItemList
     })
     feedItemListArray.push(feedItemList)
