@@ -29,6 +29,9 @@ const FeedSchema = new mongoose.Schema({
     displayTitle: {
         type: String,
     },
+    lastUpdated: {
+        type: Date,
+    }
 })
 
 export default mongoose.models.Feed || mongoose.model('Feed', FeedSchema)

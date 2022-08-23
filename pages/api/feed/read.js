@@ -14,20 +14,16 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         await dbConnect()
-        let feedList = await Feed.find({});
+        let feedList = await Feed.find({}).sort({ lastUpdated: -1 })
         for (let i = 0; i < feedList.length; i++) {
           let feed = await parser.parseURL(feedList[i].feedUrl);
           const insertFeedItems = async () => {
             for (let j = 0; j < feed.items.length; j++) {
               const item = feed.items[j];
               const feedItemExists = await FeedItem.findOne({ link: item.link });
-              logger.info(
-                {date: moment(item.pubDate).format('YYYY-MM-DD HH:mm'),
-                feedTitle: feedList[i].displayTitle,
-                title: item.title,
-                alreadyInDB: (feedItemExists !== null)
-              }); 
-              if (!feedItemExists) {
+              if (feedItemExists) {
+                break
+              } else {
                 const feedItem = await FeedItem.create({
                   title: item.title,
                   link: item.link,
@@ -39,10 +35,18 @@ export default async function handler(req, res) {
                   isoDate: item.isoDate,
                   feedTitle: feed.title,
                 })
+                logger.info(
+                  {
+                    date: moment(item.pubDate).format('YYYY-MM-DD HH:mm'),
+                    feedTitle: feedList[i].displayTitle,
+                    title: item.title,
+                    alreadyInDB: (feedItemExists !== null)
+                  });
               }
             }
           }
           await insertFeedItems();
+          await Feed.updateOne({ feedUrl: feedList[i].feedUrl }, { lastUpdated: new Date() });
         }
         res.status(200).json({ success: true })
       } catch (error) {
