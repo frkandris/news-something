@@ -25,21 +25,29 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
           </table>
         </div>
       </div>
-      <div className="d-flex align-content-around flex-wrap">
+      <div className="row">
         {feedItemListArray.map((feed, index) => (
-          <div className="border p-3 bg-light rounded w-25" key={index}>
-            <h5>{feedList[index].displayTitle}</h5>
-            <ul className="list-unstyled">
-              {feed.map((item, index) => (
-                <li key={index}>
-                  <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link>
-                </li>
-              ))}
-            </ul>
-            <div className="text-end">
-              <Link href={`/source/${feedList[index]._id}`}>
-                <a>További {feedList[index].displayTitle} hírek</a>
-              </Link>
+          <div className="col-md-4 p-3 rounded" key={index}>
+            <div className="card">
+              <div className="card-header">
+                <h5 className="card-title m-0">{feedList[index].displayTitle}</h5>
+              </div>
+              <div className="card-body">
+                <table>
+                <tbody>
+                  {feed.map((item, index2) => (
+                    <tr key={index2}>
+                      <td className="px-1 align-text-top font-monospace small">
+                        {moment(item.pubDate).format('HH:mm')}
+                      </td>
+                      <td className="align-text-top">
+                        <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link>
+                      </td>
+                    </tr>
+                  ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         ))}
