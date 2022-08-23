@@ -16,7 +16,10 @@ export default async function handler(req, res) {
                     'https://telex.hu/rss/feed.rss',
                     'https://444.hu/feed',
                     'https://index.hu/24ora/rss/',
-                    'https://liner.hu/feed/'
+                    'https://liner.hu/feed/',
+                    'https://24.hu/feed/',
+                    'https://hvg.hu/rss',
+                    'https://www.portfolio.hu/rss/all.xml'
                 ];
                 for (let i = 0; i < feedList.length; i++) {
                     let item = await parser.parseURL(feedList[i]);
