@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         await dbConnect()
-        let feedList = await Feed.find({}).sort({ lastUpdated: 1 })
+        let feedList = await Feed.find({}).sort({ lastUpdated: 1 }).limit(1)
         for (let i = 0; i < feedList.length; i++) {
           logger.info(
             {
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
           const insertFeedItems = async () => {
             for (let j = 0; j < feed.items.length; j++) {
               const item = feed.items[j];
-              const feedItemExists = await FeedItem.findOne({ link: item.link });
+              const feedItemExists = await FeedItem.findOne({ title: item.title });
               if (feedItemExists) {
                 break
               } else {
