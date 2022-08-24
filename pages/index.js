@@ -47,6 +47,11 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
                     ))}
                   </tbody>
                 </table>
+                <div className="text-end mt-2">
+                  <Link href={`/source/${feedList[index]._id}`}>
+                    <a>{`További ${feedList[index].displayTitle} hírek`}</a>
+                  </Link>
+                  </div>
               </div>
             </div>
           </div>

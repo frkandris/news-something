@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { BiCommentDetail } from 'react-icons/bi';
 import dbConnect from '../../../lib/dbConnect'
@@ -7,7 +6,6 @@ import FeedItem from '../../../models/FeedItem'
 let moment = require('moment')
 
 const FeedPage = ({ feedData, feedItemList }) => {
-    const router = useRouter()
     return (
         <div className="container" key={feedData._id}>
             <div className="row align-items-start m-2">
@@ -39,11 +37,26 @@ const FeedPage = ({ feedData, feedItemList }) => {
     )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
+    await dbConnect()
+    const feedList = await Feed.find({})
+    const paths = feedList.map(feed => ({
+        params: {
+            id: feed._id.toString()
+        }
+    }))
+    return {
+        paths,
+        fallback: 'blocking'
+    }
+}
+
+export async function getStaticProps({ params }) {
     await dbConnect()
 
     const feedData = await Feed.findById(params.id).lean()
     feedData._id = feedData._id.toString()
+    feedData.lastUpdated = feedData.lastUpdated.toString()
 
     const result = await FeedItem.find({ feedTitle: feedData.title }).sort({ isoDate: -1 });
     const feedItemList = result.map((doc) => {
