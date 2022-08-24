@@ -1,4 +1,4 @@
-name: 15-minute-cron
+name: 2-minute-cron
 on:
   schedule:
     - cron: '*/2 * * * *'
