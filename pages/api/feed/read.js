@@ -39,7 +39,8 @@ export default async function handler(req, res) {
                   guid: item.guid,
                   categories: item.categories,
                   isoDate: item.isoDate,
-                  feedTitle: feed.title,
+                  feedTitle: feedList[i].title,
+                  feedId: feedList[i]._id
                 })
                 logger.info(
                   {
