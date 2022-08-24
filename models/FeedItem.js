@@ -29,6 +29,9 @@ const FeedItemSchema = new mongoose.Schema({
   feedTitle: {
     type: String,
   },
+  feedId: {
+    type: Object,
+  },
 })
 
 export default mongoose.models.FeedItem || mongoose.model('FeedItem', FeedItemSchema)
