@@ -47,6 +47,7 @@ export async function getStaticProps({ params }) {
     await dbConnect()
     let feedItem = await FeedItem.findById(params.id).lean()
     feedItem._id = feedItem._id.toString()
+    feedItem.feedId = feedItem.feedId.toString()
     return {
         props: {
             feedItem: feedItem
