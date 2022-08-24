@@ -83,10 +83,6 @@ export async function getServerSideProps() {
     const feedItemList = result.map((doc) => {
       const feedItemList = doc.toObject()
       feedItemList._id = feedItemList._id.toString()
-      if (!moment(feedItemList.pubDate, 'HH:mm').isValid()) {
-        feedItemList.pubDate = new Date()
-        feedItemList.pubDate = feedItemList.pubDate.toString()
-      }
       return feedItemList
     })
     feedItemListArray.push(feedItemList)
