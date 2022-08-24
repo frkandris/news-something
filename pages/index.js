@@ -51,7 +51,7 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
                   <Link href={`/source/${feedList[index]._id}`}>
                     <a>{`További ${feedList[index].displayTitle} hírek`}</a>
                   </Link>
-                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -65,29 +65,30 @@ export async function getServerSideProps() {
 
   await dbConnect()
 
-  let result = await Feed.find({})
-  const feedList = result.map((doc) => {
+  const result1 = await Feed.find({}).select('_id displayTitle')
+  const feedList = result1.map((doc) => {
     const feedList = doc.toObject()
     feedList._id = feedList._id.toString()
-    feedList.lastUpdated = feedList.lastUpdated.toString()
     return feedList
   })
 
-  // get 10 latest feed items
-  result = await FeedItem.find({}).sort({ isoDate: -1 }).limit(12)
-  const freshFeedItemList = result.map((doc) => {
+  // get the 12 latest feed items
+  const result2 = await FeedItem.find({}).select('_id link title pubDate feedId isoDate').sort({ isoDate: -1 }).limit(12)
+  const freshFeedItemList = result2.map((doc) => {
     const freshFeedItemList = doc.toObject()
     freshFeedItemList._id = freshFeedItemList._id.toString()
+    freshFeedItemList.feedId = freshFeedItemList.feedId.toString()
     return freshFeedItemList
   })
 
   // get the feed items for each feed separately
   let feedItemListArray = [];
   for (let i = 0; i < feedList.length; i++) {
-    const result = await FeedItem.find({ feedTitle: feedList[i].title }).sort({ isoDate: -1 }).limit(10);
+    const result = await FeedItem.find({ feedId: result1[i]._id }).select('_id link title pubDate feedId isoDate').sort({ isoDate: -1 }).limit(10);
     const feedItemList = result.map((doc) => {
       const feedItemList = doc.toObject()
       feedItemList._id = feedItemList._id.toString()
+      feedItemList.feedId = feedItemList.feedId.toString()
       return feedItemList
     })
     feedItemListArray.push(feedItemList)
@@ -95,7 +96,7 @@ export async function getServerSideProps() {
 
   for (let i = 0; i < freshFeedItemList.length; i++) {
     for (let k = 0; k < feedList.length; k++) {
-      if (freshFeedItemList[i].feedTitle === feedList[k].title) {
+      if (freshFeedItemList[i].feedId === feedList[k]._id) {
         freshFeedItemList[i].displayTitle = feedList[k].displayTitle;
       }
     }
