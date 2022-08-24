@@ -18,7 +18,7 @@ const ArticlePage = ({ feedItem }) => {
                     <div className="col border p-3 m-2 rounded bg-light">
                         <h1 className="mb-0">{feedItem.title}</h1>
                         <p className="alas"><Link href={feedItem.link}>{feedItem.link}</Link></p>
-                        <p>{feedItem.content}</p>
+                        <p dangerouslySetInnerHTML={{__html: feedItem.content}} />
                         <div className="text-end">
                             <Link href="/">
                                 <a>Vissza a főoldalra</a>
