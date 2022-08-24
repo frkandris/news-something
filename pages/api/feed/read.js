@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         for (let i = 0; i < feedList.length; i++) {
           logger.info(
             {
-              action: "Feed update",
+              action: "Feed update started",
               lastUpdated: feedList[i].lastUpdated,
               displayTitle: feedList[i].displayTitle
             });
@@ -53,6 +53,11 @@ export default async function handler(req, res) {
             }
           }
           await insertFeedItems();
+          logger.info(
+            {
+              action: "Feed update ended",
+              displayTitle: feedList[i].displayTitle
+            });
           await Feed.updateOne({ feedUrl: feedList[i].feedUrl }, { lastUpdated: new Date() });
         }
         res.status(200).json({ success: true })
