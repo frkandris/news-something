@@ -64,7 +64,13 @@ export async function getStaticProps({ params }) {
         feedItemList._id = feedItemList._id.toString()
         return feedItemList
     })
-    return { props: { feedData: feedData, feedItemList: feedItemList } }
+    return {
+        props: {
+            feedData: feedData,
+            feedItemList: feedItemList
+        },
+        revalidate: 60
+    }
 }
 
 export default FeedPage
