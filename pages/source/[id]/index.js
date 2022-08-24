@@ -54,16 +54,21 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
     await dbConnect()
 
-    const feedData = await Feed.findById(params.id).lean()
+    const feedList = await Feed.find({ _id: params.id })
+    const result = await FeedItem.find({ feedId: feedList[0]._id }).sort({ isoDate: -1 });
+
+    const feedData = feedList[0].toObject();
     feedData._id = feedData._id.toString()
     feedData.lastUpdated = feedData.lastUpdated.toString()
 
-    const result = await FeedItem.find({ feedTitle: feedData.title }).sort({ isoDate: -1 });
     const feedItemList = result.map((doc) => {
         const feedItemList = doc.toObject()
         feedItemList._id = feedItemList._id.toString()
+        feedItemList.feedId = feedItemList.feedId.toString()
         return feedItemList
     })
+
+
     return {
         props: {
             feedData: feedData,
