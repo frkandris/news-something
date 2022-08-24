@@ -1,11 +1,9 @@
-import { useRouter } from 'next/router'
 import Head from 'next/head'
 import dbConnect from '../../../lib/dbConnect'
 import FeedItem from '../../../models/FeedItem'
 import Link from 'next/link'
 
 const ArticlePage = ({ feedItem }) => {
-    const router = useRouter()
     return (
         <>
             <Head>
