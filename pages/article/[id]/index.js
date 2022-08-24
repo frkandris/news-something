@@ -16,7 +16,7 @@ const ArticlePage = ({ feedItem }) => {
                     <div className="col border p-3 m-2 rounded bg-light">
                         <h1 className="mb-0">{feedItem.title}</h1>
                         <p className="alas"><Link href={feedItem.link}>{feedItem.link}</Link></p>
-                        <p dangerouslySetInnerHTML={{__html: feedItem.content}} />
+                        <p dangerouslySetInnerHTML={{ __html: feedItem.content }} />
                         <div className="text-end">
                             <Link href="/">
                                 <a>Vissza a főoldalra</a>
@@ -29,12 +29,30 @@ const ArticlePage = ({ feedItem }) => {
     )
 }
 
-export async function getServerSideProps({ params }) {
+export async function getStaticPaths() {
     await dbConnect()
+    const feedItemList = await FeedItem.find({})
+    const paths = feedItemList.map(feedItem => ({
+        params: {
+            id: feedItem._id.toString()
+        }
+    }))
+    return {
+        paths,
+        fallback: 'blocking'
+    }
+}
 
+export async function getStaticProps({ params }) {
+    await dbConnect()
     let feedItem = await FeedItem.findById(params.id).lean()
     feedItem._id = feedItem._id.toString()
-    return { props: { feedItem: feedItem } }
+    return {
+        props: {
+            feedItem: feedItem
+        },
+        revalidate: 60
+    }
 }
 
 export default ArticlePage
