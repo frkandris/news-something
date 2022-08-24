@@ -20,7 +20,6 @@ const FeedPage = ({ feedData, feedItemList }) => {
                                     </td>
                                     <td className="align-text-top">
                                         <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link><br />
-                                        {item.content}
                                     </td>
                                 </tr>
                             ))}
@@ -54,17 +53,15 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
     await dbConnect()
 
-    const feedList = await Feed.find({ _id: params.id })
-    const result = await FeedItem.find({ feedId: feedList[0]._id }).sort({ isoDate: -1 });
+    const feedList = await Feed.find({ _id: params.id }).select('_id displayTitle')
+    const result = await FeedItem.find({ feedId: feedList[0]._id }).select('_id pubDate link title').sort({ isoDate: -1 });
 
     const feedData = feedList[0].toObject();
     feedData._id = feedData._id.toString()
-    feedData.lastUpdated = feedData.lastUpdated.toString()
 
     const feedItemList = result.map((doc) => {
         const feedItemList = doc.toObject()
         feedItemList._id = feedItemList._id.toString()
-        feedItemList.feedId = feedItemList.feedId.toString()
         return feedItemList
     })
 
