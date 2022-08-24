@@ -14,8 +14,14 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         await dbConnect()
-        let feedList = await Feed.find({}).sort({ lastUpdated: -1 })
+        let feedList = await Feed.find({}).sort({ lastUpdated: 1 })
         for (let i = 0; i < feedList.length; i++) {
+          logger.info(
+            {
+              action: "Feed update",
+              lastUpdated: feedList[i].lastUpdated,
+              displayTitle: feedList[i].displayTitle
+            });
           let feed = await parser.parseURL(feedList[i].feedUrl);
           const insertFeedItems = async () => {
             for (let j = 0; j < feed.items.length; j++) {
@@ -37,6 +43,7 @@ export default async function handler(req, res) {
                 })
                 logger.info(
                   {
+                    action: "FeedItem created",
                     date: moment(item.pubDate).format('YYYY-MM-DD HH:mm'),
                     feedTitle: feedList[i].displayTitle,
                     title: item.title,
