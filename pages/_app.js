@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
       <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div className="container-fluid">
           <Link href="/">
-            <a className="navbar-brand">friss hírek</a>
+            <a className="navbar-brand">Friss hírek</a>
           </Link>
         </div>
       </nav>
