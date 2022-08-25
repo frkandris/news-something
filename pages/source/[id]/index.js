@@ -5,7 +5,7 @@ import Feed from '../../../models/Feed'
 import FeedItem from '../../../models/FeedItem'
 let moment = require('moment')
 
-const FeedPage = ({ feedData, feedItemList }) => {
+const SingleFeedPage = ({ feedData, feedItemList }) => {
     return (
         <div className="container" key={feedData._id}>
             <div className="row align-items-start m-2">
@@ -75,4 +75,4 @@ export async function getStaticProps({ params }) {
     }
 }
 
-export default FeedPage
+export default SingleFeedPage
