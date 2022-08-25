@@ -14,7 +14,8 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         await dbConnect()
-        let feedList = await Feed.find({}).sort({ lastUpdated: 1 }).limit(1)
+        // let feedList = await Feed.find({}).sort({ lastUpdated: 1 }).limit(1)
+        let feedList = await Feed.find({}).sort({ lastUpdated: 1 })
         for (let i = 0; i < feedList.length; i++) {
           logger.info(
             {
@@ -60,7 +61,7 @@ export default async function handler(req, res) {
             });
           await Feed.updateOne({ feedUrl: feedList[i].feedUrl }, { lastUpdated: new Date() });
         }
-        res.status(200).json({ success: true, feedUrl: feedList[i].feedUrl })
+        res.status(200).json({ success: true })
       } catch (error) {
         res.status(400).json({ success: false })
       }
