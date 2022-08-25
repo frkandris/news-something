@@ -60,7 +60,7 @@ export default async function handler(req, res) {
             });
           await Feed.updateOne({ feedUrl: feedList[i].feedUrl }, { lastUpdated: new Date() });
         }
-        res.status(200).json({ success: true })
+        res.status(200).json({ success: true, feedUrl: feedList[i].feedUrl })
       } catch (error) {
         res.status(400).json({ success: false })
       }
