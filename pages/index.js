@@ -61,7 +61,7 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
   </>
 )
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
 
   await dbConnect()
 
@@ -102,7 +102,14 @@ export async function getServerSideProps() {
     }
   }
 
-  return { props: { freshFeedItemList: freshFeedItemList, feedList: feedList, feedItemListArray: feedItemListArray } }
+  return { 
+    props: { 
+      freshFeedItemList: freshFeedItemList, 
+      feedList: feedList, 
+      feedItemListArray: feedItemListArray 
+    },
+    revalidate: 60
+  }
 }
 
 export default Index
