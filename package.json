@@ -1,5 +1,11 @@
 {
+  "name": "news-something",
+  "version": "1.0.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frkandris/news-something"
+  },
   "scripts": {
     "dev": "next dev | npx pino-pretty",
     "build": "next build",
