@@ -25,7 +25,7 @@ const AboutPage = ({ articleCount, version }) => {
     )
 }
 
-export async function getStaticProps({ }) {
+export async function getServerSideProps({ }) {
     await dbConnect()
     const version = require('../package.json').version
     const articleCount = await FeedItem.countDocuments()
@@ -33,8 +33,7 @@ export async function getStaticProps({ }) {
         props: {
             articleCount: articleCount,
             version: version
-        },
-        revalidate: 60
+        }
     }
 }
 
