@@ -43,6 +43,7 @@ export default async function handler(req, res) {
                     ['https://www.blikk.hu/rss', 'Blikk'],
                     ['https://www.klubradio.hu/rss', 'Klub Rádió'],
                     ['https://www.szeretlekmagyarorszag.hu/feed/', 'Szeretlek Magyarország'],
+                    ['https://forbes.hu/feed/', 'Forbes']
                 ];
                 for (let i = 0; i < feedList.length; i++) {
                     let item = await parser.parseURL(feedList[i][0]);
