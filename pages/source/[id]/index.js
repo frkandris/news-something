@@ -19,7 +19,7 @@ const SingleFeedPage = ({ feedData, feedItemList }) => {
                                         {moment(item.pubDate).format('HH:mm')}
                                     </td>
                                     <td className="align-text-top">
-                                        <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item._id}`}><a><BiCommentDetail /></a></Link><br />
+                                        <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item.slug}`}><a><BiCommentDetail /></a></Link><br />
                                     </td>
                                 </tr>
                             ))}
@@ -54,7 +54,7 @@ export async function getStaticProps({ params }) {
     await dbConnect()
 
     const feedList = await Feed.find({ _id: params.id }).select('_id displayTitle')
-    const result = await FeedItem.find({ feedId: feedList[0]._id }).select('_id pubDate link title').sort({ isoDate: -1 });
+    const result = await FeedItem.find({ feedId: feedList[0]._id }).select('_id pubDate link title slug').sort({ isoDate: -1 });
 
     const feedData = feedList[0].toObject();
     feedData._id = feedData._id.toString()

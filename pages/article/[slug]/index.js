@@ -4,6 +4,7 @@ import FeedItem from '../../../models/FeedItem'
 import Link from 'next/link'
 
 const ArticlePage = ({ feedItem }) => {
+
     return (
         <>
             <Head>
@@ -34,7 +35,7 @@ export async function getStaticPaths() {
     const feedItemList = await FeedItem.find({})
     const paths = feedItemList.map(feedItem => ({
         params: {
-            id: feedItem._id.toString()
+            slug: feedItem.slug || ''
         }
     }))
     return {
@@ -45,7 +46,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
     await dbConnect()
-    let feedItem = await FeedItem.findById(params.id).lean()
+    const feedItem = await FeedItem.findOne({ slug: params.slug }).lean()
     feedItem._id = feedItem._id.toString()
     feedItem.feedId = feedItem.feedId.toString()
     return {

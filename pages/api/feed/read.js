@@ -3,6 +3,7 @@ import FeedItem from '../../../models/FeedItem'
 import Feed from '../../../models/Feed'
 import moment from 'moment';
 const logger = require('pino')();
+const slugify = require('slugify');
 
 let Parser = require('rss-parser');
 let parser = new Parser();
@@ -41,7 +42,8 @@ export default async function handler(req, res) {
                   categories: item.categories,
                   isoDate: item.isoDate,
                   feedTitle: feedList[i].title,
-                  feedId: feedList[i]._id
+                  feedId: feedList[i]._id,
+                  slug: slugify(item.title, {remove: /[*+~.,?()'"!:@]/g, lower: true, locale: 'hu'})
                 })
                 logger.info(
                   {
