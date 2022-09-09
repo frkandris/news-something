@@ -9,9 +9,7 @@ export default async function handler(req, res) {
         case 'GET':
             try {
                 await dbConnect()
-                // find feeditems that contain a ? in the slug
-                const feedItemList = await FeedItem.find({ slug: { $regex: /\?/ } })
-                // let feedItemList = await FeedItem.find({})
+                let feedItemList = await FeedItem.find({})
                 for (let i = 0; i < feedItemList.length; i++) {
                     let slugString = feedItemList[i].title;
                     let slug = slugify(slugString, {remove: /[*+~.,?()'"!:@]/g, lower: true, locale: 'hu'});
