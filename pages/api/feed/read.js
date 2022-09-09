@@ -18,12 +18,12 @@ export default async function handler(req, res) {
         // let feedList = await Feed.find({}).sort({ lastUpdated: 1 }).limit(1)
         let feedList = await Feed.find({}).sort({ lastUpdated: 1 })
         for (let i = 0; i < feedList.length; i++) {
-          logger.info(
-            {
-              action: "Feed update started",
-              lastUpdated: feedList[i].lastUpdated,
-              displayTitle: feedList[i].displayTitle
-            });
+          // logger.info(
+          //   {
+          //     action: "Feed update started",
+          //     lastUpdated: feedList[i].lastUpdated,
+          //     displayTitle: feedList[i].displayTitle
+          //   });
           let feed = await parser.parseURL(feedList[i].feedUrl);
           const insertFeedItems = async () => {
             for (let j = 0; j < feed.items.length; j++) {
@@ -56,11 +56,11 @@ export default async function handler(req, res) {
             }
           }
           await insertFeedItems();
-          logger.info(
-            {
-              action: "Feed update ended",
-              displayTitle: feedList[i].displayTitle
-            });
+          // logger.info(
+          //   {
+          //     action: "Feed update ended",
+          //     displayTitle: feedList[i].displayTitle
+          //   });
           await Feed.updateOne({ feedUrl: feedList[i].feedUrl }, { lastUpdated: new Date() });
         }
         res.status(200).json({ success: true })
