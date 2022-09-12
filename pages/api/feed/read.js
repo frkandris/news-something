@@ -1,7 +1,7 @@
 import dbConnect from '../../../lib/dbConnect'
 import FeedItem from '../../../models/FeedItem'
 import Feed from '../../../models/Feed'
-import moment from 'moment';
+import { DateTime } from 'luxon'
 const logger = require('pino')();
 const slugify = require('slugify');
 
@@ -40,15 +40,15 @@ export default async function handler(req, res) {
                   contentSnippet: item.contentSnippet,
                   guid: item.guid,
                   categories: item.categories,
-                  isoDate: item.isoDate,
+                  isoDate: item.isoDate || DateTime.now().toString(), 
                   feedTitle: feedList[i].title,
                   feedId: feedList[i]._id,
-                  slug: slugify(item.title, {remove: /[*+~.,?()'"!:@]/g, lower: true, locale: 'hu'})
+                  slug: slugify(item.title, {remove: /[*+~.,?()'"!:@]/g, lower: true, locale: 'hu'}),
+                  publishedDate: new Date(item.isoDate) || new Date(), 
                 })
                 logger.info(
                   {
                     action: "FeedItem created",
-                    date: moment(item.pubDate).format('YYYY-MM-DD HH:mm'),
                     feedTitle: feedList[i].displayTitle,
                     title: item.title,
                   });
