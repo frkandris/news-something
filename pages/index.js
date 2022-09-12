@@ -3,7 +3,7 @@ import { BiCommentDetail } from 'react-icons/bi';
 import dbConnect from '../lib/dbConnect'
 import FeedItem from '../models/FeedItem'
 import Feed from '../models/Feed'
-import * as moment from 'moment/moment'
+import { DateTime } from 'luxon'
 
 const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
   <>
@@ -15,10 +15,10 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
             {freshFeedItemList.map((item, index) => (
               <tr key={index}>
                 <td className="px-1 align-text-top font-monospace small">
-                  {moment(item.pubDate).format('HH:mm')}
+                  {item.publishedDate}
                 </td>
                 <td className="align-text-top">
-                  <Link href={item.link}>{item.title}</Link> ({item.displayTitle}) <Link href={`/article/${item.slug}`}><a><BiCommentDetail /></a></Link>
+                  <a href={item.link}>{item.title}</a> ({item.displayTitle}) <a href={`/article/${item.slug}`} title={item.title}><BiCommentDetail /></a>
                 </td>
               </tr>
             ))}
@@ -38,10 +38,10 @@ const Index = ({ freshFeedItemList, feedList, feedItemListArray }) => (
                     {feed.map((item, index2) => (
                       <tr key={index2}>
                         <td className="px-1 align-text-top font-monospace small">
-                          {moment(item.pubDate).format('HH:mm')}
+                          {item.publishedDate}
                         </td>
                         <td className="align-text-top">
-                          <a href={item.link}>{item.title}</a> <a href={`/article/${item.slug}`}><BiCommentDetail /></a>
+                          <a href={item.link}>{item.title}</a> <a href={`/article/${item.slug}`} title={item.title}><BiCommentDetail /></a>
                         </td>
                       </tr>
                     ))}
@@ -73,22 +73,24 @@ export async function getStaticProps() {
   })
 
   // get the 12 latest feed items
-  const result2 = await FeedItem.find({}).select('_id link title pubDate feedId isoDate slug').sort({ isoDate: -1 }).limit(12)
+  const result2 = await FeedItem.find({}).select('_id link title feedId slug publishedDate').sort({ publishedDate: -1 }).limit(12)
   const freshFeedItemList = result2.map((doc) => {
     const freshFeedItemList = doc.toObject()
     freshFeedItemList._id = freshFeedItemList._id.toString()
     freshFeedItemList.feedId = freshFeedItemList.feedId.toString()
+    freshFeedItemList.publishedDate = DateTime.fromJSDate(freshFeedItemList.publishedDate).toFormat('T');
     return freshFeedItemList
   })
 
   // get the feed items for each feed separately
   let feedItemListArray = [];
   for (let i = 0; i < feedList.length; i++) {
-    const result = await FeedItem.find({ feedId: result1[i]._id }).select('_id link title pubDate feedId isoDate slug').sort({ isoDate: -1 }).limit(10);
+    const result = await FeedItem.find({ feedId: result1[i]._id }).select('_id link title feedId slug publishedDate').sort({ publishedDate: -1 }).limit(10);
     const feedItemList = result.map((doc) => {
       const feedItemList = doc.toObject()
       feedItemList._id = feedItemList._id.toString()
       feedItemList.feedId = feedItemList.feedId.toString()
+      feedItemList.publishedDate = DateTime.fromJSDate(feedItemList.publishedDate).toFormat('T');
       return feedItemList
     })
     feedItemListArray.push(feedItemList)
@@ -102,11 +104,11 @@ export async function getStaticProps() {
     }
   }
 
-  return { 
-    props: { 
-      freshFeedItemList: freshFeedItemList, 
-      feedList: feedList, 
-      feedItemListArray: feedItemListArray 
+  return {
+    props: {
+      freshFeedItemList: freshFeedItemList,
+      feedList: feedList,
+      feedItemListArray: feedItemListArray
     },
     revalidate: 60
   }
