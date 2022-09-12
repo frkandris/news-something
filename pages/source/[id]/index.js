@@ -3,7 +3,7 @@ import { BiCommentDetail } from 'react-icons/bi';
 import dbConnect from '../../../lib/dbConnect'
 import Feed from '../../../models/Feed'
 import FeedItem from '../../../models/FeedItem'
-let moment = require('moment')
+import { DateTime } from 'luxon'
 
 const SingleFeedPage = ({ feedData, feedItemList }) => {
     return (
@@ -16,10 +16,10 @@ const SingleFeedPage = ({ feedData, feedItemList }) => {
                             {feedItemList.map((item, index) => (
                                 <tr key={index}>
                                     <td className="px-1 align-text-top font-monospace small">
-                                        {moment(item.pubDate).format('HH:mm')}
+                                        {item.publishedDate}
                                     </td>
                                     <td className="align-text-top">
-                                        <Link href={item.link}>{item.title}</Link> <Link href={`/article/${item.slug}`}><a><BiCommentDetail /></a></Link><br />
+                                        <a href={item.link}>{item.title}</a> <a href={`/article/${item.slug}`}><BiCommentDetail /></a><br />
                                     </td>
                                 </tr>
                             ))}
@@ -54,7 +54,7 @@ export async function getStaticProps({ params }) {
     await dbConnect()
 
     const feedList = await Feed.find({ _id: params.id }).select('_id displayTitle')
-    const result = await FeedItem.find({ feedId: feedList[0]._id }).select('_id pubDate link title slug').sort({ isoDate: -1 });
+    const result = await FeedItem.find({ feedId: feedList[0]._id }).select('_id publishedDate link title slug').sort({ publishedDate: -1 });
 
     const feedData = feedList[0].toObject();
     feedData._id = feedData._id.toString()
@@ -62,6 +62,7 @@ export async function getStaticProps({ params }) {
     const feedItemList = result.map((doc) => {
         const feedItemList = doc.toObject()
         feedItemList._id = feedItemList._id.toString()
+        feedItemList.publishedDate = DateTime.fromJSDate(feedItemList.publishedDate).toFormat('T');
         return feedItemList
     })
 
