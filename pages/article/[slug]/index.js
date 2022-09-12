@@ -46,9 +46,8 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
     await dbConnect()
-    const feedItem = await FeedItem.findOne({ slug: params.slug }).lean()
+    const feedItem = await FeedItem.findOne({ slug: params.slug }).select('_id title link content').lean();
     feedItem._id = feedItem._id.toString()
-    feedItem.feedId = feedItem.feedId.toString()
     return {
         props: {
             feedItem: feedItem
