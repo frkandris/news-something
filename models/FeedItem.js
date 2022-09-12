@@ -35,6 +35,10 @@ const FeedItemSchema = new mongoose.Schema({
   slug: {
     type: String,
   },
+  publishedDate: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 export default mongoose.models.FeedItem || mongoose.model('FeedItem', FeedItemSchema)
