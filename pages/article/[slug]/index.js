@@ -30,29 +30,31 @@ const ArticlePage = ({ feedItem }) => {
     )
 }
 
-export async function getStaticPaths() {
-    await dbConnect()
-    const feedItemList = await FeedItem.find({})
-    const paths = feedItemList.map(feedItem => ({
-        params: {
-            slug: feedItem.slug || ''
-        }
-    }))
-    return {
-        paths,
-        fallback: 'blocking'
-    }
-}
+// export async function getStaticPaths() {
+//     await dbConnect()
+//     const feedItemList = await FeedItem.find({})
+//     const paths = feedItemList.map(feedItem => ({
+//         params: {
+//             slug: feedItem.slug || ''
+//         }
+//     }))
+//     return {
+//         paths,
+//         fallback: 'blocking'
+//     }
+// }
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
+// export async function getStaticProps({ params }) {
     await dbConnect()
     const feedItem = await FeedItem.findOne({ slug: params.slug }).select('_id title link content').lean();
     feedItem._id = feedItem._id.toString()
     return {
         props: {
             feedItem: feedItem
-        },
-        revalidate: 60
+        }
+        // },
+        // revalidate: 60
     }
 }
 
