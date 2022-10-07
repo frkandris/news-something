@@ -1,13 +1,19 @@
-import Head from 'next/head'
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import dbConnect from '../lib/dbConnect'
 import FeedItem from '../models/FeedItem'
 
-const AboutPage = ({ articleCount, version }) => {
+type Props = {
+    articleCount: number,
+    version: string
+}
+
+export default function AboutPage({ articleCount, version }: Props) {
     return (
         <>
             <Head>
                 <title>
-                    Rólunk | Friss hírek | friss-hirek.com
+                    Rólunk | Friss hírek | friss - hirek.com
                 </title>
             </Head>
             <div className="container">
@@ -25,10 +31,10 @@ const AboutPage = ({ articleCount, version }) => {
     )
 }
 
-export async function getServerSideProps({ }) {
+export const getServerSideProps: GetServerSideProps = async () => {
     await dbConnect()
     const version = require('../package.json').version
-    const articleCount = await FeedItem.countDocuments()
+    const articleCount: number = await FeedItem.countDocuments()
     return {
         props: {
             articleCount: articleCount,
@@ -36,5 +42,3 @@ export async function getServerSideProps({ }) {
         }
     }
 }
-
-export default AboutPage
