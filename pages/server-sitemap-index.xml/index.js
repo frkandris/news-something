@@ -6,7 +6,7 @@ import FeedItem from '../../models/FeedItem'
 export const getServerSideProps = async (ctx) => {
     await dbConnect()
 
-    const feedItems = await FeedItem.find({}).select('slug')
+    const feedItems = await FeedItem.find({}).select('slug').limit(5000).sort({ publishedDate: -1 })
     const urls = feedItems.map((feedItem) => `https://friss-hirek.com/article/${feedItem.slug}`)
 
     return getServerSideSitemapIndex(ctx, urls)
