@@ -6,8 +6,8 @@ import FeedItem from '../../models/FeedItem'
 export const getServerSideProps = async (ctx) => {
     await dbConnect()
 
-    const feedIds = await FeedItem.find({}).select('_id')
-    const urls = feedIds.map((feedId) => `https://friss-hirek.com/article/${feedId._id}`)
+    const feedItems = await FeedItem.find({}).select('slug')
+    const urls = feedItems.map((feedItem) => `https://friss-hirek.com/article/${feedItem.slug}`)
 
     return getServerSideSitemapIndex(ctx, urls)
 }
