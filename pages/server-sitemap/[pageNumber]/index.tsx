@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   }
 
   await dbConnect()
-  const feedItems = await FeedItem.find({}).select('slug').limit(5000).skip(pageNumber * 5000).sort({ publishedDate: -1 })
+  const feedItems = await FeedItem.find({}).select('slug').limit(50000).skip(pageNumber * 50000).sort({ publishedDate: -1 })
   const urls = feedItems.map((feedItem) => `https://friss-hirek.com/article/${feedItem.slug}`)
 
   // create fields array, that has all the fields you want to include in the sitemap
