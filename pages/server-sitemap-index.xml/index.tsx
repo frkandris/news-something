@@ -7,7 +7,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   await dbConnect()
   const feedItemsCount = await FeedItem.countDocuments()
-  const numberOfSitemaps = Math.ceil(feedItemsCount / 10000)
+  const numberOfSitemaps = Math.ceil(feedItemsCount / 5000)
 
   const sitemapUrls = []
   for (let i = 0; i < numberOfSitemaps; i++) {
