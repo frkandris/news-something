@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "next dev | npx pino-pretty",
     "build": "next build",
+    "static-build": "next build & next export",
     "start": "next start",
     "lint": "next lint",
     "postbuild": "next-sitemap"
