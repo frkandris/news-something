@@ -32,20 +32,33 @@ export default async function handler(req, res) {
               if (feedItemExists) {
                 break
               } else {
-                const feedItem = await FeedItem.create({
-                  title: item.title,
-                  link: item.link,
-                  pubDate: item.pubDate,
-                  content: item.content,
-                  contentSnippet: item.contentSnippet,
-                  guid: item.guid,
-                  categories: item.categories,
-                  isoDate: item.isoDate || DateTime.now().toString(), 
-                  feedTitle: feedList[i].title,
-                  feedId: feedList[i]._id,
-                  slug: slugify(item.title, {remove: /[*+~.,?()'"!:@]/g, lower: true, locale: 'hu'}),
-                  publishedDate: new Date(item.isoDate) || new Date(), 
-                })
+                const publishedDate = Date(item.isoDate);
+                if (publishedDate.toString() === 'Invalid Date') {
+                  publishedDate = new Date();
+                }
+
+                try {
+                  const feedItem = await FeedItem.create({
+                    title: item.title,
+                    link: item.link,
+                    pubDate: item.pubDate,
+                    content: item.content,
+                    contentSnippet: item.contentSnippet,
+                    guid: item.guid,
+                    categories: item.categories,
+                    isoDate: item.isoDate || DateTime.now().toString(),
+                    feedTitle: feedList[i].title,
+                    feedId: feedList[i]._id,
+                    slug: slugify(item.title, { remove: /[*+~.,?()'"!:@]/g, lower: true, locale: 'hu' }),
+                    publishedDate: publishedDate
+                  })
+                } catch (error) {
+                  logger.error(
+                    {
+                      action: "FeedItem create error",
+                      error: error
+                    });
+                }
                 logger.info(
                   {
                     action: "FeedItem created",
