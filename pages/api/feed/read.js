@@ -49,7 +49,7 @@ export default async function handler(req, res) {
                     isoDate: item.isoDate || DateTime.now().toString(),
                     feedTitle: feedList[i].title,
                     feedId: feedList[i]._id,
-                    slug: slugify(item.title, { remove: /[*+~.,?()'"!:@]/g, lower: true, locale: 'hu' }),
+                    slug: slugify(item.title, { replacement: '-', remove: /[^a-zA-Z0-9-]/g, lower: true, locale: 'hu' }),
                     publishedDate: publishedDate
                   })
                 } catch (error) {
