@@ -9,10 +9,10 @@ export default async function handler(req, res) {
         case 'GET':
             try {
                 await dbConnect()
-                let feedItemList = await FeedItem.find({ slug: { $regex: /[^a-zA-Z0-9-]/ } })
+                let feedItemList = await FeedItem.find({ slug: { $nin: [/\s/, /-/] } })
                 for (let i = 0; i < feedItemList.length; i++) {
                     let slugString = feedItemList[i].title;
-                    let slug = slugify(slugString, { replacement: '-', remove: /[^a-zA-Z0-9-]/g, lower: true, locale: 'hu' });
+                    let slug = slugify(slugString, { replacement: '-', remove: /[^a-zA-Z0-9\s]/g, lower: true, locale: 'hu' });
                     console.log(i, slug);
                     await FeedItem.updateOne({ _id: feedItemList[i]._id }, { slug: slug })
                 }
